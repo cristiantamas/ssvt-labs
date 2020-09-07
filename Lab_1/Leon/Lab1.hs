@@ -25,4 +25,5 @@ reversal = read . reverse . show
 data Boy = Matthew | Peter | Jack | Arnold | Carl
   deriving (Eq, Show)
 
+boys :: [Boy]
 boys = [Matthew, Peter, Jack, Arnold, Carl]

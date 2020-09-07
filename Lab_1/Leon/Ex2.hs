@@ -2,9 +2,9 @@
  - Author: Leon Kielstra
  - Lab 1 Exercise 2
 -}
-import Data.List
-import Debug.Trace
-import Test.QuickCheck
+import Data.List (subsequences)
+import Debug.Trace ()
+import Test.QuickCheck (quickCheckResult, withMaxSuccess)
 
 lenPowerSet :: [Int] -> Int
 lenPowerSet xs = length (subsequences xs)
@@ -23,6 +23,6 @@ testPowerSet xs = lenPowerSet xs == lenPowerSet' xs
 main :: IO ()
 main = do
   putStrLn "\n== Proof of induction cardinality of powerset =="
-  quickCheckResult testPowerSet
+  quickCheckResult (withMaxSuccess 25 testPowerSet)
 
   putStrLn ""
