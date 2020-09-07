@@ -3,7 +3,7 @@
  - Lab 1 Exercise 7
 -}
 
-import Test.QuickCheck (forAll, Gen, arbitrary, elements, quickCheckResult)
+import Test.QuickCheck (Gen, arbitrary, elements, quickCheckResult)
 
 luhn :: Integer -> Bool
 luhn n = sum (doubleEveryOther (splitDigits n)) `mod` 10 == 0
