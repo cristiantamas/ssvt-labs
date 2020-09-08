@@ -13,5 +13,12 @@ testConjecture :: Integer -> Bool
 testConjecture n = not (prime (conjecture n))
 
 -- Smallest is 7
-counterConjecture' :: [Integer]
-counterConjecture' = filter testConjecture primes
+counterConjecture :: [Integer]
+counterConjecture = filter testConjecture primes
+
+main :: IO ()
+main = do
+  putStrLn "\n== Counter Conjecture =="
+  print (take 1 counterConjecture)
+
+  putStrLn ""
