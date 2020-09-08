@@ -84,3 +84,32 @@ revPrime = filter (\x -> prime x && prime (reversal x)) [1..10000]
 
 
 --Ex5. The number 101 is a prime, and it is also the sum of five consecutive primes, namely 13+17+19+23+29. Find the smallest prime number that is a sum of 101 consecutive primes.
+
+-- Time: 15 min
+
+-- sumPrimes :: Integer
+-- sumPrimes = sum(filter prime [1..101]) -- The sum of 101 consecutive primes is 1161
+
+sumPrimes :: Integer
+sumPrimes = sum(take 101 primes)
+
+--Ex6.
+
+--Time: 30 min
+
+is_prime :: Integer -> Bool
+is_prime 1 = False
+is_prime 2 = True
+is_prime n | (length [x | x <- [2 .. n-1], mod n x == 0]) > 0 = False
+		   | otherwise = True
+
+consecutivePrimes :: Int -> [Integer]
+consecutivePrimes n = take n primes
+
+prodConPrimes :: Int -> Integer
+prodConPrimes n = (product (consecutivePrimes n)) + 1
+
+refuteConjecture :: Int -> Bool
+refuteConjecture n = is_prime (prodConPrimes n)
+
+--Ex 7:
