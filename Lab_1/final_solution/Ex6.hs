@@ -10,15 +10,16 @@ conjecture :: Integer -> Integer
 conjecture n = product (take (fromIntegral n) primes) + 1
 
 testConjecture :: Integer -> Bool
-testConjecture n = not (prime (conjecture n))
+testConjecture n = prime (conjecture n)
 
--- Smallest is 7
+-- Smallest Counter Example is 7
 counterConjecture :: [Integer]
-counterConjecture = filter testConjecture primes
+counterConjecture = filter doesNotHold primes
+                        where doesNotHold x = not (testConjecture x)
 
 main :: IO ()
 main = do
   putStrLn "\n== Counter Conjecture =="
-  print (take 1 counterConjecture)
+  print (take 3 counterConjecture)
 
   putStrLn ""

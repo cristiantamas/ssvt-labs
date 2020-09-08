@@ -5,7 +5,6 @@
 
 -- TODO: Test for correctness
 
-
 import Lab1
 
 splitDigits :: Integer -> [Integer]
