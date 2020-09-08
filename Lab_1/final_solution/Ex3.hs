@@ -22,6 +22,11 @@ lengthPermutations' xs = toInteger (length (permutations xs))
 testLengthPermutations :: [Integer] -> Bool
 testLengthPermutations xs = lengthPermutations xs == lengthPermutations' xs
 
+-- On testing with QuickCheck:
+-- By testing with QuickCheck you are not proofing that your solution is correct.
+-- You are merely showing that it works for a lot of cases,
+-- which can strongly indicate that it works for most, if not all input.
+-- Using QuickCheck (or testing by generating samples in general) is never as air tight as mathematical proof.
 main :: IO ()
 main = do
   putStrLn "\n== Proof of induction lenght of permutations =="

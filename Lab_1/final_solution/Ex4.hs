@@ -3,8 +3,14 @@
  - Lab 1 Exercise 4
 -}
 
--- TODO: How would you test this?
+{-
+- To test:
+  - The reversal function can be tested with QuickCheck. A function that e.g. reverses the number twice and tests equality.
+  - There are some edge cases such as negative numbersf of numbers that start with zero that we do not currently account for
+  - but we are only concerned with prime numbers.
 
+  - For complete certainty, besides the reversal function the filter and prime functions should also be tested.
+-}
 import Lab1
 
 reversalPrimes :: [Integer]
