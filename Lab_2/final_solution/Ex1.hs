@@ -1,38 +1,37 @@
-{- File: Ex1.hs
- - Authors: Leon Kielstra, Christian Tamas, Joel Ruhe, Thijn Albers
- - Lab 1 Exercise 1
--}
+-- Lab 2 Exercises
+-- Thijn Albers
 
-import Test.QuickCheck (quickCheckResult, forAll)
-import Lab1
+import Lab2 ( Shape(..), (-->), probs )
+import Data.List (permutations, deleteBy, delete, nub)
+import Test.QuickCheck
 
--- Workshop ex 2
-sumSquares :: Integer -> Integer
-sumSquares n = sum [k ^ 2 | k <- [1 .. n]]
+-- Excercise 1
+-- Time: 2 hours
 
-sumSquares' :: Integer -> Integer
-sumSquares' n = div (n * (n + 1) * (2 * n + 1)) 6
+categorize :: Float -> Integer
+categorize x | x >= 0 && x < 0.25 = 1
+             | x >= 0.25 && x < 0.5 = 2
+             | x >= 0.5 && x < 0.75 = 3
+             | x >= 0.75 && x <=1 = 4
 
-testSumSquares :: Integer -> Bool
-testSumSquares n = sumSquares n == sumSquares' n
+categorizeList :: [Float] -> [Integer]
+categorizeList = map categorize
 
--- Workshop ex 3
-sumCubes :: Integer -> Integer
-sumCubes n = sum [k ^ 3 | k <- [1 .. n]]
+countCategory :: [Integer] -> Integer -> Int
+countCategory xs c = length (filter (== c) xs)
 
-sumCubes' :: Integer -> Integer
-sumCubes' n = div (n ^ 2 + n) 2 ^ 2
+categorizeM :: IO [Float] -> IO [Integer]
+categorizeM = fmap categorizeList
 
-testSumCubes :: Integer -> Bool
-testSumCubes n = sumCubes n == sumCubes' n
-
--- QuickCheck test cases
-main :: IO ()
-main = do
-  putStrLn "== Proof of induction sum of squares =="
-  quickCheckResult $ forAll genPositiveIntegers testSumSquares
-
-  putStrLn "\n== Proof of induction sum of cubes =="
-  quickCheckResult $ forAll genPositiveIntegers testSumCubes
-
-  putStrLn ""
+ex1 :: IO ()
+ex1 = do
+        cs <- categorizeM (probs 10000)
+        putStrLn "== Testing RNG Distribution =="
+        putStrLn "Amount in Q1"
+        print (countCategory cs 1)
+        putStrLn "Amount in Q2"
+        print (countCategory cs 2)
+        putStrLn "Amount in Q3"
+        print (countCategory cs 3)
+        putStrLn "Amount in Q4"
+        print (countCategory cs 4)
