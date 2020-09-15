@@ -1,8 +1,6 @@
 -- Lab 2 Exercises
 -- Thijn Albers
 
-module Exes where
-
 import Lab2 ( Shape(..), (-->), probs )
 import Data.List (permutations, deleteBy, delete, nub)
 import Test.QuickCheck

@@ -1,14 +1,14 @@
 -- Lab 2 Exercises
 -- Thijn Albers
 
-module Exes where
-
 import Lab2 ( Shape(..), (-->), probs )
 import Data.List (permutations, deleteBy, delete, nub)
 import Test.QuickCheck
 
--- Ex 3
--- Time: way too long
+-- Ex 3.1
+-- Time: implementation: 10 minutes
+--       trying test function for properties: 1.5 hours
+
 forall :: [a] -> (a -> Bool) -> Bool
 forall = flip all
 
@@ -30,8 +30,8 @@ descendingOrder :: [[Char]]
 descendingOrder = ["prop_1", "even", "prop_3", "prop_2"]
 
 
--- Ex 4
--- Time: nvt
+-- Ex 3.2
+-- Time: 2 hours
 isPermutation :: Eq a => [a] -> [a] -> Bool
 isPermutation xs ys =   length xs == length ys
                         && forall xs (`elem` ys)
@@ -46,8 +46,24 @@ testIsPermutation' a = forall (permutations a) (`isPermutation` a)
 testIsNotPermutation :: [Int] -> Bool
 testIsNotPermutation a = not (forall (permutations a) (`isPermutation` (a ++ [1])))
 
+-- Testable properties:
+-- If a is a permutation of b, than b is a permutation of a
+prop_PermComp :: [Integer] -> [Integer] -> Bool
+prop_PermComp a b = isPermutation a b == isPermutation b a
+
+-- If a is a permutation of b, and b is a permutation of c, than a is a permutation of c
+prop_PermImplication :: [Integer] -> [Integer] -> [Integer] -> Bool
+prop_PermImplication a b c = isPermutation a b && isPermutation b c --> isPermutation a c
+
+-- Because we dont need to account for duplicates, a and be can be permutations if and only if they are the same length
+prop_PermLength :: [Integer] -> [Integer] -> Bool
+prop_PermLength a b = isPermutation a b --> length a == length b
+
 ex3 :: IO ()
 ex3 = do
         quickCheckWith stdArgs { maxSize = 10 } testIsPermutation
         quickCheckWith stdArgs { maxSize = 10 } testIsPermutation'
         quickCheckWith stdArgs { maxSize = 10 } testIsNotPermutation
+        quickCheck prop_PermComp
+        quickCheck prop_PermImplication
+        quickCheck prop_PermLength
