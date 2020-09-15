@@ -1,37 +1,35 @@
 {- File: Ex1.hs
  - Author: Leon Kielstra
- - Lab 1 Exercise 1
+ - Lab 2 Exercise 1 (Distribution)
 -}
-import Debug.Trace
-import Test.QuickCheck
 
--- Workshop ex 2
-sumSquares :: Integer -> Integer
-sumSquares n = sum [k ^ 2 | k <- [1 .. n]]
+import Lab2 (probs)
 
-sumSquares' :: Integer -> Integer
-sumSquares' n = div (n * (n + 1) * (2 * n + 1)) 6
+toQuartile :: Float -> Integer
+toQuartile n
+  | n < 0.25 = 1
+  | n < 0.5 = 2
+  | n < 0.75 = 3
+  | otherwise = 4
 
-testSumSquares :: Integer -> Bool
-testSumSquares n = let a = abs n in sumSquares a == sumSquares' a
+quartileList :: [Float] -> [Integer]
+quartileList ns = map toQuartile ns
 
--- Workshop ex 3
-sumCubes :: Integer -> Integer
-sumCubes n = sum [k ^ 3 | k <- [1 .. n]]
+quartileListIO :: IO [Float] -> IO [Integer]
+quartileListIO ns = fmap quartileList ns
 
-sumCubes' :: Integer -> Integer
-sumCubes' n = (div (n * (n + 1)) 2) ^ 2
+countQuartile :: Integer -> [Integer] -> Int
+countQuartile quartile ns = length (filter (== quartile) ns)
 
-testSumCubes :: Integer -> Bool
-testSumCubes n = let a = abs n in sumCubes a == sumCubes' a
-
--- QuickCheck test cases
+-- Running this multiple times shows that the claim seems correct
 main :: IO ()
 main = do
-  putStrLn "== Proof of induction sum of squares =="
-  quickCheckResult testSumSquares
-
-  putStrLn "\n== Proof of induction sum of cubes =="
-  quickCheckResult testSumCubes
-
-  putStrLn ""
+  ns <- quartileListIO (probs 10000)
+  putStrLn "Quartile 1:"
+  print (countQuartile 1 ns)
+  putStrLn "Quartile 2:"
+  print (countQuartile 2 ns)
+  putStrLn "Quartile 3:"
+  print (countQuartile 3 ns)
+  putStrLn "Quartile 4:"
+  print (countQuartile 4 ns)
