@@ -1,4 +1,31 @@
+import System.Random
+import Test.QuickCheck
 import Lecture3
+import GHC.Base (liftM2, liftM)
+
+
+
+form :: Gen Form
+form = sized form'
+
+instance Arbitrary Form where
+    arbitrary = form
+
+name :: Gen Name
+name = abs `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
+
+name2 :: Gen Name
+name2 = choose (0,10)
+
+form' :: Integral a => a -> Gen Form
+form' 0 = fmap Prop name2
+form' n | n > 0 = oneof [fmap Prop name2,
+              fmap Neg subform,
+              Cnj <$> listOf subform,
+              Dsj <$> listOf subform,
+              liftM2 Impl subform subform,
+              liftM2 Equiv subform subform]
+              where subform = form' (n `div` 2)
 
 --Time spent: 5h
 
@@ -25,18 +52,37 @@ convert_to_cnf :: Form -> Form
 convert_to_cnf (Prop x) = Prop x
 convert_to_cnf (Neg (Prop x)) = Neg (Prop x)
 convert_to_cnf (Neg (Neg f)) = convert_to_cnf f
-convert_to_cnf (Dsj[Prop y, Prop z]) = Dsj[Prop y, Prop z]
-convert_to_cnf (Cnj[Prop y, Prop z]) = Cnj[Prop y, Prop z]
+convert_to_cnf (Dsj[a, b]) 
+    | isSimpleAtom a && isSimpleAtom b = Dsj[a, b]
+convert_to_cnf (Cnj[a, b])
+    | isSimpleAtom a && isSimpleAtom b = Cnj[a, b]
 convert_to_cnf (Cnj[f1, f2]) = Cnj[convert_to_cnf f1, convert_to_cnf f2]
-convert_to_cnf (Dsj [f1, Cnj fs]) =  (Cnj ((map (\ f -> Dsj[f1, f])) (map convert_to_cnf fs)))
-convert_to_cnf (Dsj [f1, Prop x]) = (Dsj [f1, Prop x])
-convert_to_cnf (Dsj [f1, Dsj fs]) =  (Cnj ((map (\ f -> Dsj[f1, f])) (map convert_to_cnf fs)))
-convert_to_cnf (Dsj [Cnj fs, f1]) =  (Cnj ((map (\ f -> Dsj[f, f1])) (map convert_to_cnf fs)))
-convert_to_cnf (Dsj [Dsj fs, f1]) =  (Cnj ((map (\ f -> Dsj[f, f1])) (map convert_to_cnf fs)))
+convert_to_cnf (Dsj [f1, Dsj fs]) =  convert_to_cnf (Cnj ((map (\ f -> Dsj[f1, f])) (map convert_to_cnf fs)))
+convert_to_cnf (Dsj [f1, Cnj fs]) =  convert_to_cnf (Cnj ((map (\ f -> Dsj[f1, f])) (map convert_to_cnf fs)))
+convert_to_cnf (Dsj [Cnj fs, f1]) =  convert_to_cnf (Cnj ((map (\ f -> Dsj[f, f1])) (map convert_to_cnf fs)))
+convert_to_cnf (Dsj [Dsj fs, f1]) =  convert_to_cnf (Cnj ((map (\ f -> Dsj[f, f1])) (map convert_to_cnf fs)))
 convert_to_cnf (Dsj [Prop x, f2]) = (Dsj [Prop x, f2])
 
 
+cnf :: Form -> Form
+cnf f = convert_to_cnf $ (nnf . arrowfree) f
 
+isSimpleAtom :: Form -> Bool
+isSimpleAtom (Prop x) = True
+isSimpleAtom (Neg (Prop x)) = True
+isSimpleAtom _ = False
+
+isSimpleDsj :: Form -> Bool
+isSimpleDsj (Dsj ds) = all isSimpleAtom ds
+isSimpleDsj _ = False
+
+isCnf :: Form -> Bool
+isCnf (Dsj ds) = isSimpleDsj (Dsj ds)
+isCnf (Cnj cs) = all isSimpleDsj cs
+isCnf x = isSimpleAtom x
+
+prop_cnf :: Form -> Bool
+prop_cnf f =  isCnf $ cnf f
 
 
 main :: IO()
@@ -44,17 +90,23 @@ main = do
     let form_1 = Impl p q
     let form_2 = Equiv form_1 q
 
+    let form_test = Equiv (Neg p) q
+
     putStrLn "Conversion to CNF"
     putStr "Initial formula: " 
-    print (form_2)
+    print (form_test)
 
     putStr "Arrowfree formula: " 
-    print (arrowfree form_2)
+    print (arrowfree form_test)
 
     putStr "NNF formula: " 
-    print (convert_to_nnf form_2)
+    print (convert_to_nnf form_test)
     putStr "CNF conversion: "
-    print (convert_to_cnf (convert_to_nnf form_2))
+    print (convert_to_cnf (convert_to_nnf form_test))
+
+
+    quickCheckWith stdArgs { maxSize = 10 } $ forAll form prop_cnf
+
 
 
 -- TEST EXAMPLES --
