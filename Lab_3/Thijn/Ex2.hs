@@ -8,7 +8,7 @@ import Lecture3
 import GHC.Base (liftM2, liftM)
 
 -- Ex2
--- Time: start 1.5 hours
+-- Time: 1.5 hours
 
 equiv :: Form -> Form -> Bool
 equiv f1 f2 = allEvls f1 == allEvls f2
