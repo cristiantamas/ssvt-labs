@@ -8,13 +8,14 @@ import Lecture3
 import GHC.Base (liftM2, liftM)
 import Generators
 
-equiv :: Form -> Form -> Bool
-equiv f1 f2 = allEvls f1 == allEvls f2
-
 allEvls :: Form -> [Bool]
 allEvls f = map (`evl` f) (allVals f)
 
--- To test the parser we created a Form generator. By doing this we can test our properties
+equiv :: Form -> Form -> Bool
+equiv f1 f2 = allEvls f1 == allEvls f2
+
+
+-- To test the parser we created a Form generator. By doing this we could test our properties
 -- on a large number of cases.
 -- The first property is that for a string representation of a form (show),
 -- the parser should return a form which is equivalent to the original form
@@ -23,9 +24,12 @@ allEvls f = map (`evl` f) (allVals f)
 prop_ParseShow :: Form -> Bool
 prop_ParseShow f = equiv f ( head (parse (show f)))
 
+-- Output:
+-- +++ OK, passed 100 tests.
+-- +++ OK, passed 100 tests.
+-- +++ OK, passed 100 tests.
 ex2 :: IO ()
 ex2 = do
-        -- TODO: calculate size of a form with maxSize 10 and recursion level 5
-        -- to show it is sufficient
-        -- Can also do different types: low recursion, high size
+        quickCheckWith stdArgs { maxSize = 5 } $ forAll form prop_ParseShow
+        quickCheckWith stdArgs { maxSize = 10 } $ forAll form prop_ParseShow
         quickCheckWith stdArgs { maxSize = 15 } $ forAll form prop_ParseShow

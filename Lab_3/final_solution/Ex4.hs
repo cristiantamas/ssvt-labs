@@ -91,11 +91,27 @@ test_negationNormalForm = hoareTestForm isArrowfree nnf isNegationNormalForm
 test_cnf :: Form -> Bool
 test_cnf = hoareTestForm isNegationNormalForm cnf isCnf
 
+-- OUTPUT
+-- True
+-- True
+-- True
+-- True
+-- True
+-- +++ OK, passed 100 tests.
+-- False
+-- False
+-- False
+-- False
+-- False
+-- +++ OK, passed 100 tests.
+-- +++ OK, passed 100 tests.
+-- Final test fails, likely because of the generator's flaw
+
 ex4 :: IO ()
 ex4 = do
         -- Tests for isCnf:
         -- These are all in CNF plus some tests with the generator
-        -- I left the manual tests because they helped me find errors in the generator
+        -- We left the manual tests because they helped find errors in the generator
         -- and isCnf function
         print $ isCnf (Cnj [p, Dsj [q, r]])
         print $ isCnf (Cnj [Dsj [p, Neg q, Neg r], Dsj [Neg p, q, r]])

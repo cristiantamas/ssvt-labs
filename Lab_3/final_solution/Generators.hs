@@ -22,8 +22,11 @@ name2 = choose (0,10)
 -- Heavily inspired by "Generating Recursive Data Types" from http://www.cse.chalmers.se/~rjmh/QuickCheck/manual_body.html
 -- The generation of forms is recursive and the size of a form generated can quickly grow
 -- This makes the generation very computationally intensive
--- To counter this we set a maximum recursion level of 5, which still results in large forms
--- but computationally doable.
+-- To counter this we create an upper bound based on the given size of the tree,
+-- so that we may manipulate the size for different scenarios
+
+-- One flaw of the generator is that it can generate disjunctions and conjunctions
+-- of length 1
 form' :: Integral a => a -> Gen Form
 form' 0 = fmap Prop name2
 form' n | n > 0 = oneof [fmap Prop name2,
