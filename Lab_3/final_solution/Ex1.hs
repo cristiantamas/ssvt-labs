@@ -1,3 +1,8 @@
+{- File: Ex1.hs
+ - Authors: Leon Kielstra, Christian Tamas, Joel Ruhe, Thijn Albers
+ - Lab 3 Exercise 1 
+-}
+
 module Ex1 where
 
 import Lecture3

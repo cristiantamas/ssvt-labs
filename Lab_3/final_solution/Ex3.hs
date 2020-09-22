@@ -1,3 +1,9 @@
+{- File: Ex3.hs
+ - Authors: Leon Kielstra, Christian Tamas, Joel Ruhe, Thijn Albers
+ - Lab 3 Exercise 3
+-}
+-- Time spent: 5h
+
 import System.Random
 import Test.QuickCheck
 import Lecture3
@@ -8,7 +14,7 @@ isSimpleAtom (Prop x) = True
 isSimpleAtom (Neg (Prop x)) = True
 isSimpleAtom _ = False
 
---Time spent: 5h
+
 
  -- The implementation uses the arrowfree and nnf functions declared in Lecture 3
  -- arrowfree: Takes a form and removes p-->q and p<-->q by replacing them with

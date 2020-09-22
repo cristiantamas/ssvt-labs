@@ -1,5 +1,8 @@
--- Ex2
--- Time: 1.5 hours
+{- File: Ex2.hs
+ - Authors: Leon Kielstra, Christian Tamas, Joel Ruhe, Thijn Albers
+ - Lab 3 Exercise 2 
+-}
+-- Time spent: 1.5h
 
 import Data.List
 import System.Random

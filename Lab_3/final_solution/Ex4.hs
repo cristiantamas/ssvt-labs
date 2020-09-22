@@ -1,6 +1,8 @@
--- Lab3 exercises
--- Exercise 4
--- Time indication: 3 hours
+{- File: Ex4.hs
+ - Authors: Leon Kielstra, Christian Tamas, Joel Ruhe, Thijn Albers
+ - Lab 3 Exercise 4 
+-}
+-- Time spent: 3h
 
 import Data.List
 import System.Random

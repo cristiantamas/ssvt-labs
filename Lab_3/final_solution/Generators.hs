@@ -25,14 +25,12 @@ name2 = choose (1,10)
 -- To counter this we create an upper bound based on the given size of the tree,
 -- so that we may manipulate the size for different scenarios
 
--- One flaw of the generator is that it can generate disjunctions and conjunctions
--- of length 1
 form' :: Integral a => a -> Gen Form
 form' 0 = fmap Prop name2
 form' n | n > 0 = oneof [fmap Prop name2,
               fmap Neg subform,
-              Cnj <$> listOf1 subform,
-              Dsj <$> listOf1 subform,
+              Cnj <$> (vectorOf 2) subform,
+              Dsj <$> (vectorOf 2) subform,
               liftM2 Impl subform subform,
               liftM2 Equiv subform subform]
               where subform = form' (n `div` 2)
