@@ -1,4 +1,4 @@
-{- File: Ex3.hs
+{- File: Ex1.hs
  - Author: Leon Kielstra
  - Lab 3 Exercise 1
 -}
