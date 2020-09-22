@@ -17,7 +17,7 @@ name :: Gen Name
 name = abs `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 
 name2 :: Gen Name
-name2 = choose (0,10)
+name2 = choose (1,10)
 
 -- Heavily inspired by "Generating Recursive Data Types" from http://www.cse.chalmers.se/~rjmh/QuickCheck/manual_body.html
 -- The generation of forms is recursive and the size of a form generated can quickly grow

@@ -1,3 +1,5 @@
+module Ex1 where
+
 import Lecture3
 import Data.List (nub)
 import Data.String

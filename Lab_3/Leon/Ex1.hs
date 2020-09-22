@@ -2,6 +2,7 @@
  - Author: Leon Kielstra
  - Lab 3 Exercise 1
 -}
+module Ex1 where
 
 import Lecture3
 import Data.List (nub)
