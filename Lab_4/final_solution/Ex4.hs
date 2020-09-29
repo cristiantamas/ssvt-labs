@@ -47,7 +47,7 @@ p --> q = (not p) || q
 -- a randomly generated relation is serial is small. Testing these properties with random relations would result
 -- in many trivial tests (because False -> anyting == True)
 -- (under the assumption that isSerial works ofcourse)
--- quickCheck prop_noSerial gives a trivial between 90-95%
+-- quickCheck prop_noSerial gives a trivial score between 90-95%
 prop_noSerial :: Rel Int -> Property
 prop_noSerial r = classify (not $ isSerial (domR r) r) "trivial" True
 
