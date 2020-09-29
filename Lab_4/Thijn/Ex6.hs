@@ -2,7 +2,8 @@
 -- Time: 1hr so far
 -- Author: Thijn Albers
 
--- TODO: Add testcases that should give false
+-- TODO: Add random checks that are not quickCheck. I think thats what they want?
+--       Add testcases that should give false
 --       Make order necessary for closure functions
 --       Add more testcases / properties
 
